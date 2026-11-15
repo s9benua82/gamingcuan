@@ -3,63 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info Game [Nama Game Anda]</title>
+    <title>Info Game CryptoCrops</title>
     <style>
+        /* --- PENGATURAN WARNA & FONT --- */
+        :root {
+            --bg-color: #f4f6f0; /* Warna krem/putih tulang belakang */
+            --sidebar-color: #1b3a2a; /* Hijau gelap sidebar */
+            --card-bg: #ffffff;
+            --text-main: #2e3b32;
+            --text-muted: #6b7a70;
+            --primary-green: #3b7043; /* Hijau tombol & banner */
+            --accent-gold: #d4a373; /* Emas/kuning panen */
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
         }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+
+        /* --- SIDEBAR (Kiri - Hanya muncul di Laptop) --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-color);
+            color: #e2e8e4;
+            padding: 20px 0;
+            display: none; /* Disembunyikan di HP */
+            flex-direction: column;
         }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .referral-btn {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 5px;
+
+        .sidebar-logo {
+            padding: 0 20px 20px;
+            font-size: 1.2rem;
             font-weight: bold;
-            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
         }
-        .referral-btn:hover {
-            background-color: #2980b9;
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        /* --- KONTEN UTAMA --- */
+        .main-content {
+            flex: 1;
+            padding: 15px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar (Info Saldo/Weather) */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--sidebar-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .weather-badge {
+            background-color: #fcebc1;
+            color: #8b5a2b;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Kartu Pool Panen */
+        .pool-card {
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pool-card h2 {
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #a3c9a8;
+            margin-bottom: 10px;
+        }
+
+        .pool-card .amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .pool-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+        }
+
+        .stat-item h4 {
+            font-size: 0.8rem;
+            color: #a3c9a8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-item p {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* Tombol Referal */
+        .referral-card {
+            background-color: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .referral-card p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .btn-referral {
+            display: inline-block;
+            background-color: var(--accent-gold);
+            color: #1b3a2a;
+            padding: 14px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-referral:hover {
+            background-color: #c29266;
+        }
+
+        /* Konten Info Tambahan */
+        .info-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .info-section h3 {
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* --- TAMPILAN LAPTOP / DESKTOP (Layar lebar) --- */
+        @media (min-width: 768px) {
+            body {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                display: flex; /* Munculkan sidebar di laptop */
+            }
+
+            .main-content {
+                padding: 30px;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            
+            .top-bar {
+                background-color: transparent;
+                color: var(--text-main);
+                padding: 0;
+                margin-bottom: 30px;
+            }
+            
+            .top-bar .weather-badge {
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+
+            .btn-referral {
+                width: auto;
+                padding: 14px 40px;
+            }
+            
+            .pool-stats {
+                justify-content: flex-start;
+                gap: 50px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>🎮 Info Game Online yg bisa menambah uang jajan anda</h1>
-
-    <div class="card">
-        <h2>Tentang Game</h2>
-        <p>[Tulis sedikit deskripsi tentang game yang Anda mainkan di sini. Misalnya: Game ini adalah game strategi seru yang bisa dimainkan di HP.]</p>
+    <!-- SIDEBAR (Hanya tampil di Laptop) -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            🌱 Farm Game
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">🏠 Farm</li>
+            <li>👑 Premium</li>
+            <li>🌾 Seeds</li>
+            <li>📦 Collection</li>
+            <li>⭐ Farm Level</li>
+            <li>🛡️ Guilds</li>
+            <li>🤝 Referral</li>
+            <li>👥 Community</li>
+            <li>📖 Wiki</li>
+        </ul>
     </div>
 
-    <div class="card">
-        <h2>Link Referal</h2>
-        <p>Tertarik untuk ikut bermain? Gunakan link referal saya di bawah ini:</p>
-        <!-- GANTI LINK DI BAWAH INI DENGAN LINK REFERAL ANDA -->
-        <a href="https://link-referal-anda-disini.com" class="referral-btn" target="_blank">Daftar Lewat Link Referal Saya</a>
-    </div>
+    <!-- KONTEN UTAMA -->
+    <div class="main-content">
+        
+        <!-- Top Bar (Info Cuaca & Saldo) -->
+        <div class="top-bar">
+            <div>🌱 [Nama Game Anda]</div>
+            <div class="weather-badge">☀️ Heat Wave · +20% affinity</div>
+        </div>
 
-    <div class="card">
-        <h2>Tips Singkat</h2>
-        <p>[Opsional: Tulis 1-2 tips atau pengalaman Anda bermain game ini untuk menarik minat pengunjung.]</p>
+        <!-- Kartu Pool Panen (Seperti gambar 1 & 2) -->
+        <div class="pool-card">
+            <h2>Active Pool · ☀️ Heat Wave</h2>
+            <div class="amount">590.000 Harvest Credits</div>
+            
+            <div class="pool-stats">
+                <div class="stat-item">
+                    <h4>Ends in</h4>
+                    <p>01:52:48</p>
+                </div>
+                <div class="stat-item">
+                    <h4>Your Harvest Points</h4>
+                    <p>309</p>
+                </div>
+                <div class="stat-item">
+                    <h4>Your estimated reward</h4>
+                    <p>25 HC · US$0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu Link Referal -->
+        <div class="referral-card">
+            <p>Tertarik memainkan game ini? Gunakan link referal saya untuk mendapatkan bonus pemula!</p>
+            <!-- GANTI LINK DI BAWAH INI DENGAN LINK REFERAL ANDA -->
+            <a href="[LINK_REFERAL_ANDA]" class="btn-referral" target="_blank">Daftar Lewat Link Referal</a>
+        </div>
+
+        <!-- Info Tambahan -->
+        <div class="info-section">
+            <h3>Tentang [Nama Game Anda]</h3>
+            <p>[Tulis deskripsi singkat atau tips bermain game di sini. Misalnya: CryptoCrops adalah game simulasi pertanian di mana kita bisa menanam tanaman, memanen hasilnya, dan mengikuti kompetisi seru setiap 6 jam.]</p>
+        </div>
+
     </div>
 
 </body>
